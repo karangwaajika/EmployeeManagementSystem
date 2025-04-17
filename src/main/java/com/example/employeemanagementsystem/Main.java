@@ -25,7 +25,7 @@ public class Main {
         Comparator<Employee<Integer>> comparator = new Comparator<Employee<Integer>>() {
             @Override
             public int compare(Employee<Integer> o1, Employee<Integer> o2) {
-                if (o1.yearsOfExperience < o2.yearsOfExperience) {
+                if (o1.getYearsOfExperience() < o2.getYearsOfExperience()) {
                     return 1;
                 } else {
                     return -1;
@@ -37,8 +37,8 @@ public class Main {
 
         // display employees from list
         ls.forEach((employee) -> {
-            System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.name,
-                    employee.department, employee.yearsOfExperience);
+            System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience());
         });
 
         // insert employee to the database
