@@ -41,6 +41,8 @@ public class Main {
                     employee.getDepartment(), employee.getYearsOfExperience());
         });
 
+// ###################################  END TASK 1 ###############################################
+
         // insert employee to the database
         db.addEmployee(employee1.employeeId, employee1);
         db.addEmployee(employee2.employeeId, employee2);
@@ -48,6 +50,15 @@ public class Main {
         // get all the employees from the database
         System.out.println(db.getAllEmployees());
 
+        db.updateEmployeeDetails(1, "yearsOfExperience", 4);
+
+        System.out.println(db.getAllEmployees());
+        ls.forEach((employee) -> {
+            System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience());
+        });
+
+// ###################################  END TASK 2 ###############################################
 
     }
 }
