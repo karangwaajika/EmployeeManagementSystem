@@ -127,4 +127,31 @@ public class Database<T> {
         return employeeList;
 
     }
+
+    public HashMap<String, ArrayList<Double>> getAverageDepartmentSalary() {
+        HashMap<String, ArrayList<Double>> departmentToSalaries = new HashMap<>();
+        List<Employee<T>> employeeList = new ArrayList<>(employees.values()).stream().toList();
+        Iterator<Employee<T>> iterator = employeeList.iterator();
+        while (iterator.hasNext()) {
+            Employee<T> employee = iterator.next();
+            String department = employee.getDepartment();
+            if (departmentToSalaries.containsKey(department)) {
+                ArrayList<Double> salaryList = departmentToSalaries.get(department);
+                double salary = salaryList.get(0) + employee.getSalary();
+                double nbrOfEmployees = salaryList.get(1) + 1;
+                salaryList.add(0, salary);
+                salaryList.add(1, nbrOfEmployees);
+                departmentToSalaries.put(department, salaryList);
+            } else {
+                ArrayList<Double> salaryList = new ArrayList<>();
+                salaryList.add(employee.getSalary());
+                double nbrOfEmployees = 1;
+                salaryList.add(nbrOfEmployees);
+                departmentToSalaries.put(department, salaryList);
+            }
+
+        }
+        return departmentToSalaries;
+
+    }
 }
