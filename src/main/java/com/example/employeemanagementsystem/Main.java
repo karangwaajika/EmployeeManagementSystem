@@ -93,5 +93,13 @@ public class Main {
             db.searchMinimumRating(3)
                     .forEach(n -> System.out.println(n.getName()));
         }
+
+        System.out.println("####### range salary #########");
+        if (db.searchRangeSalary(400, 1000).toArray().length == 0) {
+            System.out.println("nothing found");
+        } else {
+            db.searchRangeSalary(400, 1000)
+                    .forEach(n -> System.out.println(n.getName()));
+        }
     }
 }

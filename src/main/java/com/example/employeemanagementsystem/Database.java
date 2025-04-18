@@ -65,4 +65,9 @@ public class Database<T> {
         return employees.values().stream()
                 .filter(n -> n.getPerformanceRating() >= rating);
     }
+
+    public Stream<Employee<T>> searchRangeSalary(double salary1, double salary2) {
+        return employees.values().stream()
+                .filter(n -> salary1 <= n.getSalary() && n.getSalary() <= salary2);
+    }
 }
