@@ -1,9 +1,6 @@
 package com.example.employeemanagementsystem;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -98,8 +95,13 @@ public class Main {
         if (db.searchRangeSalary(400, 1000).toArray().length == 0) {
             System.out.println("nothing found");
         } else {
-            db.searchRangeSalary(400, 1000)
-                    .forEach(n -> System.out.println(n.getName()));
+            // using an iterator to traverse element
+            List<Employee<Integer>> l = db.searchRangeSalary(400, 1000).toList();
+            Iterator<Employee<Integer>> itr = l.iterator();
+            while (itr.hasNext()) {
+                Employee<Integer> employee = itr.next();
+                System.out.println(employee.getName());
+            }
         }
     }
 }
