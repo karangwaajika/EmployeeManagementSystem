@@ -104,6 +104,7 @@ public class Main {
             System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.getName(),
                     employee.getDepartment(), employee.getYearsOfExperience());
         }
+
         System.out.println("sort by salary");
         ArrayList<Employee<Integer>> employeesList = db.getAllEmployees();
         Collections.sort(employeesList, new EmployeeSalaryComparator<Integer>());
@@ -112,6 +113,17 @@ public class Main {
             Employee<Integer> employee = iter.next();
             System.out.printf("%d| name:%s, dep: %s, years: %d, salary: %f\n", employee.employeeId, employee.getName(),
                     employee.getDepartment(), employee.getYearsOfExperience(), employee.getSalary());
+        }
+
+        System.out.println("sort by rating performance");
+        ArrayList<Employee<Integer>> dbList = db.getAllEmployees();
+        Collections.sort(dbList, new EmployeePerformanceComparator<Integer>());
+        Iterator<Employee<Integer>> t = dbList.iterator();
+        while (t.hasNext()) {
+            Employee<Integer> employee = t.next();
+            System.out.printf("%d| name:%s, dep: %s, years: %d, salary: %f, rating: %f\n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience()
+                    , employee.getSalary(), employee.getPerformanceRating());
         }
 
 
