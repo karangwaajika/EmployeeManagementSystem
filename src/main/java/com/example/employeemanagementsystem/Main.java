@@ -11,7 +11,7 @@ public class Main {
                 1, true);
         Employee<Integer> employee2 = new Employee<>(2,
                 "joel", "Finance", 1000, 3,
-                3, true);
+                2, true);
         Employee<Integer> employee3 = new Employee<>(3,
                 "joella", "HR", 400, 4.5,
                 3, true);
@@ -20,20 +20,10 @@ public class Main {
         ArrayList<Employee<Integer>> ls = new ArrayList<>();
         ls.add(employee1);
         ls.add(employee2);
+        ls.add(employee3);
 
-        // sort by years of experience descending order
-        Comparator<Employee<Integer>> comparator = new Comparator<Employee<Integer>>() {
-            @Override
-            public int compare(Employee<Integer> o1, Employee<Integer> o2) {
-                if (o1.getYearsOfExperience() < o2.getYearsOfExperience()) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
-        };
-
-        Collections.sort(ls, comparator);
+        // sort by years of experience descending order using comparable
+        Collections.sort(ls);
 
         // display employees from list
         ls.forEach((employee) -> {
@@ -103,5 +93,27 @@ public class Main {
                 System.out.println(employee.getName());
             }
         }
+
+        System.out.println("############ END TASK 3 #####################");
+        // ###################################  END TASK 3 ###############################################
+        System.out.println("sort by years of experience");
+        ArrayList<Employee<Integer>> a = db.sortByYearsOfExperience();
+        Iterator<Employee<Integer>> itr = a.iterator();
+        while (itr.hasNext()) {
+            Employee<Integer> employee = itr.next();
+            System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience());
+        }
+        System.out.println("sort by salary");
+        ArrayList<Employee<Integer>> employeesList = db.getAllEmployees();
+        Collections.sort(employeesList, new EmployeeSalaryComparator<Integer>());
+        Iterator<Employee<Integer>> iter = employeesList.iterator();
+        while (iter.hasNext()) {
+            Employee<Integer> employee = iter.next();
+            System.out.printf("%d| name:%s, dep: %s, years: %d, salary: %f\n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience(), employee.getSalary());
+        }
+
+
     }
 }

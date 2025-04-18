@@ -1,6 +1,6 @@
 package com.example.employeemanagementsystem;
 
-public class Employee<T> {
+public class Employee<T> implements Comparable<Employee<T>> {
     T employeeId;
     private String name;
     private String department;
@@ -75,5 +75,14 @@ public class Employee<T> {
 
     public boolean getIsActive() {
         return this.isActive;
+    }
+
+    @Override
+    public int compareTo(Employee<T> o) {
+        if (this.getYearsOfExperience() < o.getYearsOfExperience()) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }

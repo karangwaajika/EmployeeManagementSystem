@@ -1,8 +1,9 @@
 package com.example.employeemanagementsystem;
 
-import java.util.HashMap;
-import java.util.regex.Pattern;
+import java.util.*;
 import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.Collector;
 
 public class Database<T> {
     private final HashMap<T, Employee<T>> employees = new HashMap<>();
@@ -13,8 +14,8 @@ public class Database<T> {
         return "Employee's added successfully !!";
     }
 
-    public HashMap<T, Employee<T>> getAllEmployees() {
-        return employees;
+    public ArrayList<Employee<T>> getAllEmployees() {
+        return new ArrayList<>(employees.values().stream().toList());
     }
 
     public String removeEmployee(T employeeId) {
@@ -69,5 +70,24 @@ public class Database<T> {
     public Stream<Employee<T>> searchRangeSalary(double salary1, double salary2) {
         return employees.values().stream()
                 .filter(n -> salary1 <= n.getSalary() && n.getSalary() <= salary2);
+    }
+
+    public ArrayList<Employee<T>> sortByYearsOfExperience() {
+        ArrayList<Employee<T>> result = new ArrayList<>(employees.values().stream().toList());
+
+        Comparator<Employee<T>> comparator = new Comparator<Employee<T>>() {
+            @Override
+            public int compare(Employee<T> o1, Employee<T> o2) {
+                if (o1.getYearsOfExperience() < o2.getYearsOfExperience()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        };
+        Collections.sort(result, comparator);
+
+        return result;
+
     }
 }
