@@ -1,6 +1,7 @@
 package com.example.employeemanagementsystem;
 
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 public class Database<T> {
     private final HashMap<T, Employee<T>> employees = new HashMap<>();
@@ -47,7 +48,10 @@ public class Database<T> {
             }
         }
         System.out.println("Updated successfully ");
-
     }
 
+    public Stream<Employee<T>> filterByDepartment(String field) {
+        return employees.values().stream()
+                .filter(n -> n.getDepartment().equals(field));
+    }
 }

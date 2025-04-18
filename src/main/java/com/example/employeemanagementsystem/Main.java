@@ -15,6 +15,9 @@ public class Main {
         Employee<Integer> employee2 = new Employee<>(2,
                 "joel", "Finance", 1000, 2,
                 3, true);
+        Employee<Integer> employee3 = new Employee<>(3,
+                "joella", "HR", 400, 2,
+                3, true);
 
         // insert employee to a list
         ArrayList<Employee<Integer>> ls = new ArrayList<>();
@@ -46,6 +49,7 @@ public class Main {
         // insert employee to the database
         db.addEmployee(employee1.employeeId, employee1);
         db.addEmployee(employee2.employeeId, employee2);
+        db.addEmployee(employee3.employeeId, employee3);
 
         // get all the employees from the database
         System.out.println(db.getAllEmployees());
@@ -61,5 +65,12 @@ public class Main {
 
 // ###################################  END TASK 2 ###############################################
 
+        //filter by department
+        if (db.filterByDepartment("Finance").toArray().length == 0) {
+            System.out.println("nothing");
+        } else {
+            db.filterByDepartment("Finance")
+                    .forEach(n -> System.out.println(n.getName()));
+        }
     }
 }
