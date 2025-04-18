@@ -10,13 +10,13 @@ public class Main {
         Database<Integer> db = new Database<>(); // initialize database
 
         Employee<Integer> employee1 = new Employee<>(1,
-                "ajika", "HR", 2000, 2,
+                "ajika", "HR", 2000, 2.5,
                 1, true);
         Employee<Integer> employee2 = new Employee<>(2,
-                "joel", "Finance", 1000, 2,
+                "joel", "Finance", 1000, 3,
                 3, true);
         Employee<Integer> employee3 = new Employee<>(3,
-                "joella", "HR", 400, 2,
+                "joella", "HR", 400, 4.5,
                 3, true);
 
         // insert employee to a list
@@ -68,6 +68,7 @@ public class Main {
 // ###################################  END TASK 2 ###############################################
 
         //filter by department
+        System.out.println("###### search by department #####");
         if (db.filterByDepartment("Finance").toArray().length == 0) {
             System.out.println("nothing");
         } else {
@@ -75,11 +76,21 @@ public class Main {
                     .forEach(n -> System.out.println(n.getName()));
         }
 
+        System.out.println("##### search by name #####");
         //filter by name as auto complete
         if (db.filterByName("j").toArray().length == 0) {
             System.out.println("nothing found");
         } else {
             db.filterByName("j")
+                    .forEach(n -> System.out.println(n.getName()));
+        }
+
+        System.out.println("##### minimum rating ######");
+        //retrieve minimum rating
+        if (db.searchMinimumRating(3).toArray().length == 0) {
+            System.out.println("nothing found");
+        } else {
+            db.searchMinimumRating(3)
                     .forEach(n -> System.out.println(n.getName()));
         }
     }

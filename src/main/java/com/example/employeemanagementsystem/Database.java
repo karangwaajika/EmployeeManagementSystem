@@ -60,4 +60,9 @@ public class Database<T> {
         return employees.values().stream()
                 .filter(n -> n.getName().contains(name));
     }
+
+    public Stream<Employee<T>> searchMinimumRating(double rating) {
+        return employees.values().stream()
+                .filter(n -> n.getPerformanceRating() >= rating);
+    }
 }
