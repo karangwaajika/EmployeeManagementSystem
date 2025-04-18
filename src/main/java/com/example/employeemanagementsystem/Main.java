@@ -51,6 +51,7 @@ public class Main {
         System.out.println(db.getAllEmployees());
 
         db.updateEmployeeDetails(1, "yearsOfExperience", 4);
+        System.out.println(db.removeEmployee(4));
 
         System.out.println(db.getAllEmployees());
         ls.forEach((employee) -> {

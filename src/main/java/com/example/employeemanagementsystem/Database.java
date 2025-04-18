@@ -16,8 +16,12 @@ public class Database<T> {
     }
 
     public String removeEmployee(T employeeId) {
-        employees.remove(employeeId);
-        return "Employee's deleted successfully !!";
+        if (employees.containsKey(employeeId)) {
+            employees.remove(employeeId);
+            return "Employee's deleted successfully !!";
+        }
+        return "Employee Id doesn't exist";
+
     }
 
     public void updateEmployeeDetails(T employeeId, String field, Object newValue) {
