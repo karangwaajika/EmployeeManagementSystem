@@ -90,4 +90,41 @@ public class Database<T> {
         return result;
 
     }
+
+    public ArrayList<Employee<T>> giveSalaryRaise(double minPerformanceRating) {
+        double raiseAmount = 500.0;
+        ArrayList<Employee<T>> ls = new ArrayList<>(employees.values());
+        Iterator<Employee<T>> iter = ls.iterator();
+        while (iter.hasNext()) {
+            Employee<T> employee = iter.next();
+            double salary = employee.getSalary();
+            double ratingPerformance = employee.getPerformanceRating();
+
+            if (ratingPerformance >= minPerformanceRating) {
+                employee.setSalary(salary + raiseAmount);
+            }
+        }
+        return ls;
+
+    }
+
+    public List<Employee<T>> retrieveTopFiveHighestPaid() {
+        ArrayList<Employee<T>> employeeList = new ArrayList<>(employees.values());
+        Comparator<Employee<T>> comparator = new Comparator<Employee<T>>() {
+            @Override
+            public int compare(Employee<T> o1, Employee<T> o2) {
+                if (o1.getSalary() < o2.getSalary()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        };
+        Collections.sort(employeeList, comparator);
+        if (employeeList.size() >= 5) {
+            return employeeList.subList(0, 1);
+        }
+        return employeeList;
+
+    }
 }

@@ -126,6 +126,28 @@ public class Main {
                     , employee.getSalary(), employee.getPerformanceRating());
         }
 
+        System.out.println("############ END TASK 4 #####################");
+        // ###################################  END TASK 4 ###############################################
+
+        System.out.println("give a salary raise");
+        ArrayList<Employee<Integer>> empls = db.giveSalaryRaise(3);
+        Iterator<Employee<Integer>> te = empls.iterator();
+        while (te.hasNext()) {
+            Employee<Integer> employee = te.next();
+            System.out.printf("%d| name:%s, dep: %s, years: %d, salary: %f, rating: %f\n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience()
+                    , employee.getSalary(), employee.getPerformanceRating());
+        }
+
+        System.out.println("give top five highest paid");
+        List<Employee<Integer>> empList = db.retrieveTopFiveHighestPaid();
+        Iterator<Employee<Integer>> iterate = empList.iterator();
+        while (iterate.hasNext()) {
+            Employee<Integer> employee = iterate.next();
+            System.out.printf("%d| name:%s, dep: %s, years: %d, salary: %f, rating: %f\n", employee.employeeId, employee.getName(),
+                    employee.getDepartment(), employee.getYearsOfExperience()
+                    , employee.getSalary(), employee.getPerformanceRating());
+        }
 
     }
 }
