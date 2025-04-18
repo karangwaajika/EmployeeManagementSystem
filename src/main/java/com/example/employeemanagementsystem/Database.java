@@ -1,6 +1,7 @@
 package com.example.employeemanagementsystem;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Database<T> {
@@ -53,5 +54,10 @@ public class Database<T> {
     public Stream<Employee<T>> filterByDepartment(String field) {
         return employees.values().stream()
                 .filter(n -> n.getDepartment().equals(field));
+    }
+
+    public Stream<Employee<T>> filterByName(String name) {
+        return employees.values().stream()
+                .filter(n -> n.getName().contains(name));
     }
 }

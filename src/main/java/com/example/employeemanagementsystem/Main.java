@@ -43,6 +43,7 @@ public class Main {
             System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.getName(),
                     employee.getDepartment(), employee.getYearsOfExperience());
         });
+        System.out.println("############ END TASK 1 #####################");
 
 // ###################################  END TASK 1 ###############################################
 
@@ -62,6 +63,7 @@ public class Main {
             System.out.printf("%d| name:%s, dep: %s, years: %d \n", employee.employeeId, employee.getName(),
                     employee.getDepartment(), employee.getYearsOfExperience());
         });
+        System.out.println("############ END TASK 2 #####################");
 
 // ###################################  END TASK 2 ###############################################
 
@@ -70,6 +72,14 @@ public class Main {
             System.out.println("nothing");
         } else {
             db.filterByDepartment("Finance")
+                    .forEach(n -> System.out.println(n.getName()));
+        }
+
+        //filter by name as auto complete
+        if (db.filterByName("j").toArray().length == 0) {
+            System.out.println("nothing found");
+        } else {
+            db.filterByName("j")
                     .forEach(n -> System.out.println(n.getName()));
         }
     }
