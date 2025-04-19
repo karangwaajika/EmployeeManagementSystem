@@ -65,6 +65,16 @@
                 </items>
             </ComboBox>
 
+            <ComboBox fx:id="sortComboBox" promptText="Sort by">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="None"/>
+                        <String fx:value="Salary"/>
+                        <String fx:value="Rating"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
             <Button text="Delete Selected"/>
         </HBox>
         <!-- TableView -->

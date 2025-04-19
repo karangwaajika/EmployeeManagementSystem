@@ -5,9 +5,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Controller {
     // input field
@@ -28,30 +28,30 @@ public class Controller {
     @FXML
     private TableView<Employee<Integer>> employeeTable;
     @FXML
-    private TableColumn<Employee, String> nameColumn;
+    private TableColumn<Employee<Integer>, String> nameColumn;
     @FXML
-    private TableColumn<Employee, String> departmentColumn;
+    private TableColumn<Employee<Integer>, String> departmentColumn;
     @FXML
-    private TableColumn<Employee, Double> salaryColumn;
+    private TableColumn<Employee<Integer>, Double> salaryColumn;
     @FXML
-    private TableColumn<Employee, String> ratingColumn;
+    private TableColumn<Employee<Integer>, String> ratingColumn;
     @FXML
-    private TableColumn<Employee, Integer> experienceColumn;
+    private TableColumn<Employee<Integer>, Integer> experienceColumn;
     @FXML
-    private TableColumn<Employee, Boolean> activeColumn;
+    private TableColumn<Employee<Integer>, Boolean> activeColumn;
 
     // action fields
     @FXML
     private TextField searchField;
     @FXML
     private ComboBox<String> departmentFilterComboBox;
+    @FXML
+    private ComboBox<String> sortComboBox;
 
 
     private final Database<Integer> db = new Database<>(); // initialize database
     private final ObservableList<Employee<Integer>> employeeList = FXCollections
             .observableArrayList(db.getAllEmployees());
-    private final FilteredList<Employee<Integer>> filteredList = new FilteredList<>
-            (employeeList, p -> true);
 
 
     @FXML
@@ -91,7 +91,8 @@ public class Controller {
             Employee<Integer> employee = new Employee<>(nbrOfEmployees, name,
                     department, salary, rating, experience, isActive);
             db.addEmployee(nbrOfEmployees, employee);
-            employeeList.setAll(db.getAllEmployees());
+
+            employeeList.setAll(db.getAllEmployees()); // to make table auto-refresh
 
             showAlert(Alert.AlertType.CONFIRMATION, "Success",
                     "✅ Employee added Successfully: " + employee.getName());
@@ -109,7 +110,7 @@ public class Controller {
     private void clearForm() {
         nameField.clear();
 //        departmentComboBox.getSelectionModel().clearSelection();
-        departmentComboBox.setValue(null);
+        departmentComboBox.setValue("Select Department");
         salaryField.clear();
         ratingField.clear();
         experienceField.clear();
@@ -133,30 +134,72 @@ public class Controller {
         experienceColumn.setCellValueFactory(new PropertyValueFactory<>("yearsOfExperience"));
         activeColumn.setCellValueFactory(new PropertyValueFactory<>("isActive"));
 
-        employeeTable.setItems(employeeList);
+        employeeTable.setItems(employeeList); // refresh table for new record
 
-        employeeTable.setItems(filteredList);
+        // search
+        searchField.textProperty().addListener((obs,
+                                                oldVal, newVal) -> applySearchByName());
+        // filter
         departmentFilterComboBox.setValue("All"); // Default
-        departmentFilterComboBox.setOnAction(e -> applyFilters());
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+        departmentFilterComboBox.setOnAction(e -> applyFilterByDepartment());
+
+        // sorting
+        sortComboBox.setValue("None");
+        sortComboBox.setOnAction(e -> applySortBy());
     }
 
-    private boolean customFilter(Employee<Integer> emp, String searchText, String departmentFilter) {
-        boolean matchesSearch = emp.getName().toLowerCase().contains(searchText)
-                || emp.getDepartment().toLowerCase().contains(searchText);
-
-        boolean matchesDepartment = departmentFilter.equals("All")
-                || emp.getDepartment().equalsIgnoreCase(departmentFilter);
-
-        return matchesSearch && matchesDepartment;
-    }
-
-    private void applyFilters() {
+    public void applySearchByName() {
         String searchText = searchField.getText().toLowerCase().trim();
-        String departmentFilter = departmentFilterComboBox.getValue();
+        ObservableList<Employee<Integer>> employeeList = FXCollections
+                .observableArrayList(db.filterByName(searchText));
 
-
-        filteredList.setPredicate(emp -> customFilter(emp, searchText, departmentFilter));
+        employeeTable.setItems(employeeList);
     }
+
+    public void applyFilterByDepartment() {
+        String departmentFilter = departmentFilterComboBox.getValue();
+        if (departmentFilter.equals("All")) {
+            ObservableList<Employee<Integer>> employeeList = FXCollections
+                    .observableArrayList(db.getAllEmployees());
+            employeeTable.setItems(employeeList);
+        } else {
+            ObservableList<Employee<Integer>> employeeList = FXCollections
+                    .observableArrayList(db.filterByDepartment(departmentFilter));
+            employeeTable.setItems(employeeList);
+        }
+    }
+
+    public void applySortBy() {
+        String sortOption = sortComboBox.getValue();
+        switch (sortOption) {
+            case "None":
+                ObservableList<Employee<Integer>> employeeList = FXCollections
+                        .observableArrayList(db.getAllEmployees());
+                employeeTable.setItems(employeeList);
+                break;
+            case "Salary":
+                ArrayList<Employee<Integer>> employees = db.getAllEmployees();
+                Collections.sort(employees, new EmployeeSalaryComparator<>());
+                ObservableList<Employee<Integer>> employeesList = FXCollections
+                        .observableArrayList(employees);
+                employeeTable.setItems(employeesList);
+                break;
+            case "YearsOfExperience":
+                ArrayList<Employee<Integer>> list = db.getAllEmployees();
+                Collections.sort(list);
+                ObservableList<Employee<Integer>> listEmployee = FXCollections
+                        .observableArrayList(list);
+                employeeTable.setItems(listEmployee);
+                break;
+            default:
+                ArrayList<Employee<Integer>> emploList = db.getAllEmployees();
+                Collections.sort(emploList, new EmployeePerformanceComparator<>());
+                ObservableList<Employee<Integer>> allEmployees = FXCollections
+                        .observableArrayList(emploList);
+                employeeTable.setItems(allEmployees);
+
+        }
+    }
+
 
 }

@@ -86,7 +86,7 @@ public class Testing {
             System.out.println("nothing found");
         } else {
             // using an iterator to traverse element
-            List<Employee<Integer>> l = db.searchRangeSalary(400, 1000).toList();
+            List<Employee<Integer>> l = db.searchRangeSalary(400, 1000);
             Iterator<Employee<Integer>> itr = l.iterator();
             while (itr.hasNext()) {
                 Employee<Integer> employee = itr.next();
@@ -97,7 +97,8 @@ public class Testing {
         System.out.println("############ END TASK 3 #####################");
         // ###################################  END TASK 3 ###############################################
         System.out.println("sort by years of experience");
-        ArrayList<Employee<Integer>> a = db.sortByYearsOfExperience();
+        ArrayList<Employee<Integer>> a = db.getAllEmployees();
+        Collections.sort(db.getAllEmployees());
         Iterator<Employee<Integer>> itr = a.iterator();
         while (itr.hasNext()) {
             Employee<Integer> employee = itr.next();
