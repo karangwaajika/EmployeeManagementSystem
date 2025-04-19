@@ -100,7 +100,7 @@ public class Database<T> {
         };
         Collections.sort(employeeList, comparator);
         if (employeeList.size() >= 5) {
-            return employeeList.subList(0, 1);
+            return employeeList.subList(0, 4);
         }
         return employeeList;
 

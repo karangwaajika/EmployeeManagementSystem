@@ -156,7 +156,7 @@ public class Controller {
     }
 
     public void applySearchByName() {
-        String searchText = searchField.getText().toLowerCase().trim();
+        String searchText = searchField.getText();
         ObservableList<Employee<Integer>> employeeList = FXCollections
                 .observableArrayList(db.filterByName(searchText));
 
