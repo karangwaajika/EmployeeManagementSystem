@@ -92,7 +92,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.employeemanagementsystem/com.example.employeemanagementsystem.HelloApplication
+                                com.example.employeemanagementsystem/com.example.employeemanagementsystem.Application
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

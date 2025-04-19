@@ -8,6 +8,7 @@ public class Employee<T> implements Comparable<Employee<T>> {
     private double performanceRating;
     private int yearsOfExperience;
     private boolean isActive;
+    static int nbrOfEmployees = 1;
 
     Employee(T employeeId, String name, String department,
              double salary, double performanceRating, int yearsOfExperience,
@@ -19,6 +20,7 @@ public class Employee<T> implements Comparable<Employee<T>> {
         this.performanceRating = performanceRating;
         this.yearsOfExperience = yearsOfExperience;
         this.isActive = isActive;
+        nbrOfEmployees ++;
     }
 
     public double getSalary() {

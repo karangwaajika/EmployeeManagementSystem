@@ -2,7 +2,7 @@ package com.example.employeemanagementsystem;
 
 import java.util.*;
 
-public class Main {
+public class Testing {
     public static void main(String[] args) {
         Database<Integer> db = new Database<>(); // initialize database
 
