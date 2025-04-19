@@ -75,7 +75,7 @@
                 </items>
             </ComboBox>
 
-            <Button text="Delete Selected"/>
+            <Button fx:id="deleteButton" text="Delete Selected" onAction="#handleDeleteEmployee"/>
         </HBox>
         <!-- TableView -->
         <TableView fx:id="employeeTable" prefHeight="200">

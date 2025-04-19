@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 public class Controller {
     // input field
@@ -47,6 +48,8 @@ public class Controller {
     private ComboBox<String> departmentFilterComboBox;
     @FXML
     private ComboBox<String> sortComboBox;
+    @FXML
+    private Button deleteButton;
 
 
     private final Database<Integer> db = new Database<>(); // initialize database
@@ -87,7 +90,7 @@ public class Controller {
                         "Rating cannot be greater than 5.");
                 return;
             }
-
+            // add employee to Database(Hashmap)
             Employee<Integer> employee = new Employee<>(nbrOfEmployees, name,
                     department, salary, rating, experience, isActive);
             db.addEmployee(nbrOfEmployees, employee);
@@ -109,8 +112,7 @@ public class Controller {
 
     private void clearForm() {
         nameField.clear();
-//        departmentComboBox.getSelectionModel().clearSelection();
-        departmentComboBox.setValue("Select Department");
+        departmentComboBox.getSelectionModel().clearSelection();
         salaryField.clear();
         ratingField.clear();
         experienceField.clear();
@@ -146,6 +148,11 @@ public class Controller {
         // sorting
         sortComboBox.setValue("None");
         sortComboBox.setOnAction(e -> applySortBy());
+
+        //deleting employee
+        deleteButton.disableProperty().bind(
+                employeeTable.getSelectionModel().selectedItemProperty().isNull()
+        );
     }
 
     public void applySearchByName() {
@@ -153,7 +160,7 @@ public class Controller {
         ObservableList<Employee<Integer>> employeeList = FXCollections
                 .observableArrayList(db.filterByName(searchText));
 
-        employeeTable.setItems(employeeList);
+        employeeTable.setItems(employeeList); // update table
     }
 
     public void applyFilterByDepartment() {
@@ -178,6 +185,7 @@ public class Controller {
                 employeeTable.setItems(employeeList);
                 break;
             case "Salary":
+                // sort using comparator
                 ArrayList<Employee<Integer>> employees = db.getAllEmployees();
                 Collections.sort(employees, new EmployeeSalaryComparator<>());
                 ObservableList<Employee<Integer>> employeesList = FXCollections
@@ -185,6 +193,7 @@ public class Controller {
                 employeeTable.setItems(employeesList);
                 break;
             case "YearsOfExperience":
+                // sort using comparable
                 ArrayList<Employee<Integer>> list = db.getAllEmployees();
                 Collections.sort(list);
                 ObservableList<Employee<Integer>> listEmployee = FXCollections
@@ -192,12 +201,38 @@ public class Controller {
                 employeeTable.setItems(listEmployee);
                 break;
             default:
+                // sort using comparator
                 ArrayList<Employee<Integer>> emploList = db.getAllEmployees();
                 Collections.sort(emploList, new EmployeePerformanceComparator<>());
                 ObservableList<Employee<Integer>> allEmployees = FXCollections
                         .observableArrayList(emploList);
                 employeeTable.setItems(allEmployees);
 
+        }
+    }
+
+    @FXML
+    private void handleDeleteEmployee() {
+        Employee<Integer> selectedEmployee = employeeTable.getSelectionModel().getSelectedItem();
+
+        if (selectedEmployee == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select an employee to delete.");
+            return;
+        }
+
+        // Confirm before deleting
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Delete");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Are you sure you want to delete this employee?");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            db.removeEmployee(selectedEmployee.employeeId);
+            ArrayList<Employee<Integer>> emploList = db.getAllEmployees();
+            ObservableList<Employee<Integer>> allEmployees = FXCollections
+                    .observableArrayList(emploList);
+            employeeTable.setItems(allEmployees);
         }
     }
 
