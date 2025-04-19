@@ -24,15 +24,27 @@
         <VBox spacing="10">
             <TextField fx:id="nameField" promptText="Name"/>
 
-            <TextField fx:id="departmentField" promptText="Department"/>
-
             <TextField fx:id="salaryField" promptText="Salary"/>
 
             <TextField fx:id="ratingField" promptText="Performance Rating (1-5)"/>
 
             <TextField fx:id="experienceField" promptText="Years of Experience"/>
+            <HBox spacing="10">
+                <ComboBox fx:id="departmentComboBox" promptText="Select Department">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="HR"/>
+                            <String fx:value="IT"/>
+                            <String fx:value="Finance"/>
+                            <String fx:value="Marketing"/>
+                            <String fx:value="Operations"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
 
-            <CheckBox fx:id="isActiveCheckBox" text="Is Active"/>
+                <CheckBox fx:id="isActiveCheckBox" text="Is Active"/>
+            </HBox>
+
 
             <Button text="Submit" onAction="#handleSubmit"/>
         </VBox>
@@ -40,12 +52,15 @@
         <HBox spacing="10">
             <TextField fx:id="searchField" promptText="Search..."/>
 
-            <ComboBox fx:id="filterComboBox" promptText="Filter by Active">
+            <ComboBox fx:id="departmentFilterComboBox" promptText="Filter by Department">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="All"/>
-                        <String fx:value="Active"/>
-                        <String fx:value="Inactive"/>
+                        <String fx:value="HR"/>
+                        <String fx:value="IT"/>
+                        <String fx:value="Finance"/>
+                        <String fx:value="Marketing"/>
+                        <String fx:value="Operations"/>
                     </FXCollections>
                 </items>
             </ComboBox>

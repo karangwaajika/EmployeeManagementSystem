@@ -15,7 +15,7 @@ public class Database<T> {
     }
 
     public ArrayList<Employee<T>> getAllEmployees() {
-        return new ArrayList<>(employees.values().stream().toList());
+        return new ArrayList<Employee<T>>(employees.values());
     }
 
     public String removeEmployee(T employeeId) {

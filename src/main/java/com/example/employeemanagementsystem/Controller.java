@@ -5,13 +5,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
+
+import java.util.ArrayList;
 
 public class Controller {
     // input field
     @FXML
     private TextField nameField;
     @FXML
-    private TextField departmentField;
+    private ComboBox<String> departmentComboBox;
     @FXML
     private TextField salaryField;
     @FXML
@@ -37,19 +40,35 @@ public class Controller {
     @FXML
     private TableColumn<Employee, Boolean> activeColumn;
 
+    // action fields
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox<String> departmentFilterComboBox;
+
+
     private final Database<Integer> db = new Database<>(); // initialize database
-    private final ObservableList<Employee<Integer>> employeeList = FXCollections.observableArrayList();
+    private final ObservableList<Employee<Integer>> employeeList = FXCollections
+            .observableArrayList(db.getAllEmployees());
+    private final FilteredList<Employee<Integer>> filteredList = new FilteredList<>
+            (employeeList, p -> true);
+
 
     @FXML
     private void handleSubmit() {
         try {
             String name = nameField.getText();
-            String department = departmentField.getText();
+            String department = departmentComboBox.getValue();
             double salary = Double.parseDouble(salaryField.getText());
             double rating = Double.parseDouble(ratingField.getText());
             int experience = Integer.parseInt(experienceField.getText());
             boolean isActive = isActiveCheckBox.isSelected();
             int nbrOfEmployees = Employee.nbrOfEmployees;
+
+            if (department == null || department.isBlank()) {
+                showAlert(Alert.AlertType.ERROR, "Validation Error", "Please select a department.");
+                return;
+            }
 
             if (!name.matches("[a-zA-Z\\s]+")) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Name",
@@ -72,7 +91,7 @@ public class Controller {
             Employee<Integer> employee = new Employee<>(nbrOfEmployees, name,
                     department, salary, rating, experience, isActive);
             db.addEmployee(nbrOfEmployees, employee);
-            employeeList.add(employee);
+            employeeList.setAll(db.getAllEmployees());
 
             showAlert(Alert.AlertType.CONFIRMATION, "Success",
                     "✅ Employee added Successfully: " + employee.getName());
@@ -89,7 +108,8 @@ public class Controller {
 
     private void clearForm() {
         nameField.clear();
-        departmentField.clear();
+//        departmentComboBox.getSelectionModel().clearSelection();
+        departmentComboBox.setValue(null);
         salaryField.clear();
         ratingField.clear();
         experienceField.clear();
@@ -114,6 +134,29 @@ public class Controller {
         activeColumn.setCellValueFactory(new PropertyValueFactory<>("isActive"));
 
         employeeTable.setItems(employeeList);
+
+        employeeTable.setItems(filteredList);
+        departmentFilterComboBox.setValue("All"); // Default
+        departmentFilterComboBox.setOnAction(e -> applyFilters());
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+    }
+
+    private boolean customFilter(Employee<Integer> emp, String searchText, String departmentFilter) {
+        boolean matchesSearch = emp.getName().toLowerCase().contains(searchText)
+                || emp.getDepartment().toLowerCase().contains(searchText);
+
+        boolean matchesDepartment = departmentFilter.equals("All")
+                || emp.getDepartment().equalsIgnoreCase(departmentFilter);
+
+        return matchesSearch && matchesDepartment;
+    }
+
+    private void applyFilters() {
+        String searchText = searchField.getText().toLowerCase().trim();
+        String departmentFilter = departmentFilterComboBox.getValue();
+
+
+        filteredList.setPredicate(emp -> customFilter(emp, searchText, departmentFilter));
     }
 
 }
