@@ -1,11 +1,13 @@
 package com.example.employeemanagementsystem;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 
 public class Controller {
+    // input field
     @FXML
     private TextField nameField;
     @FXML
@@ -19,7 +21,24 @@ public class Controller {
     @FXML
     private CheckBox isActiveCheckBox;
 
+    // table fields
+    @FXML
+    private TableView<Employee<Integer>> employeeTable;
+    @FXML
+    private TableColumn<Employee, String> nameColumn;
+    @FXML
+    private TableColumn<Employee, String> departmentColumn;
+    @FXML
+    private TableColumn<Employee, Double> salaryColumn;
+    @FXML
+    private TableColumn<Employee, String> ratingColumn;
+    @FXML
+    private TableColumn<Employee, Integer> experienceColumn;
+    @FXML
+    private TableColumn<Employee, Boolean> activeColumn;
+
     private final Database<Integer> db = new Database<>(); // initialize database
+    private final ObservableList<Employee<Integer>> employeeList = FXCollections.observableArrayList();
 
     @FXML
     private void handleSubmit() {
@@ -53,6 +72,8 @@ public class Controller {
             Employee<Integer> employee = new Employee<>(nbrOfEmployees, name,
                     department, salary, rating, experience, isActive);
             db.addEmployee(nbrOfEmployees, employee);
+            employeeList.add(employee);
+
             showAlert(Alert.AlertType.CONFIRMATION, "Success",
                     "✅ Employee added Successfully: " + employee.getName());
             System.out.println("✅ Employee added: " + employee.getName());
@@ -81,6 +102,18 @@ public class Controller {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void initialize() {
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        departmentColumn.setCellValueFactory(new PropertyValueFactory<>("department"));
+        salaryColumn.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("performanceRating"));
+        experienceColumn.setCellValueFactory(new PropertyValueFactory<>("yearsOfExperience"));
+        activeColumn.setCellValueFactory(new PropertyValueFactory<>("isActive"));
+
+        employeeTable.setItems(employeeList);
     }
 
 }

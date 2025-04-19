@@ -36,6 +36,33 @@
 
             <Button text="Submit" onAction="#handleSubmit"/>
         </VBox>
+        <!-- Controls Row: Search + Filter + Delete -->
+        <HBox spacing="10">
+            <TextField fx:id="searchField" promptText="Search..."/>
+
+            <ComboBox fx:id="filterComboBox" promptText="Filter by Active">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="All"/>
+                        <String fx:value="Active"/>
+                        <String fx:value="Inactive"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <Button text="Delete Selected"/>
+        </HBox>
+        <!-- TableView -->
+        <TableView fx:id="employeeTable" prefHeight="200">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name"/>
+                <TableColumn fx:id="departmentColumn" text="Department"/>
+                <TableColumn fx:id="salaryColumn" text="Salary"/>
+                <TableColumn fx:id="ratingColumn" text="Rating"/>
+                <TableColumn fx:id="experienceColumn" text="Experience"/>
+                <TableColumn fx:id="activeColumn" text="Active"/>
+            </columns>
+        </TableView>
 
     </VBox>
 
