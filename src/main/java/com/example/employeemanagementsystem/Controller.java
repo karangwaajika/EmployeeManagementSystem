@@ -1,6 +1,7 @@
 package com.example.employeemanagementsystem;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
@@ -31,13 +32,35 @@ public class Controller {
             boolean isActive = isActiveCheckBox.isSelected();
             int nbrOfEmployees = Employee.nbrOfEmployees;
 
+            if (!name.matches("[a-zA-Z\\s]+")) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Name",
+                        "Name must only contain letters and spaces.");
+                return;
+            }
+
+            if (!department.matches("[a-zA-Z\\s]+")) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Department",
+                        "Department must only contain letters and spaces.");
+                return;
+            }
+
+            if (rating > 5) {
+                showAlert(Alert.AlertType.ERROR, "Validation Error",
+                        "Rating cannot be greater than 5.");
+                return;
+            }
+
             Employee<Integer> employee = new Employee<>(nbrOfEmployees, name,
                     department, salary, rating, experience, isActive);
             db.addEmployee(nbrOfEmployees, employee);
-
+            showAlert(Alert.AlertType.CONFIRMATION, "Success",
+                    "✅ Employee added Successfully: " + employee.getName());
             System.out.println("✅ Employee added: " + employee.getName());
             clearForm();
 
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Input Error",
+                    "Please enter valid numbers for salary, rating, and experience.");
         } catch (Exception e) {
             System.out.println("⚠️ Error: " + e.getMessage());
         }
@@ -51,4 +74,13 @@ public class Controller {
         experienceField.clear();
         isActiveCheckBox.setSelected(false);
     }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
