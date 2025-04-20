@@ -13,7 +13,7 @@ public class Testing {
                 "joel", "Finance", 1000, 3,
                 2, true);
         Employee<Integer> employee3 = new Employee<>(3,
-                "joella", "HR", 400, 4.5,
+                "Joella Nshaka", "HR", 1100000, 4.5,
                 3, true);
 
         // insert employee to a list
@@ -166,11 +166,58 @@ public class Testing {
         System.out.println("average salary in each department");
 
         HashMap<String, ArrayList<Double>> departmentToSalaries = db.getAverageDepartmentSalary();
-        for(Map.Entry<String, ArrayList<Double>> entry: departmentToSalaries.entrySet()){
-            double avg = entry.getValue().get(0)/entry.getValue().get(1);
+        char pipe = '|';
+        String underscore = "_";
+        String header = "Department | Amount     |";
+        System.out.printf("%s\n", underscore.repeat(header.length()));
+        System.out.println(header);
+        System.out.printf("%s\n", underscore.repeat(header.length()));
+        for (Map.Entry<String, ArrayList<Double>> entry : departmentToSalaries.entrySet()) {
+            double avg = entry.getValue().get(0) / entry.getValue().get(1);
+            String avgString = String.format("%.2f", avg);
             String department = entry.getKey();
-            System.out.printf("%s | %f \n", department, avg);
+            int space = 11 - department.length();
+            System.out.printf("%s %" + space + "c %-10s %c \n", department, pipe, avgString, pipe);
         }
+        System.out.printf("%s\n", underscore.repeat(header.length()));
+
+        System.out.println("############ END TASK 5 #####################");
+        // ###################################  END TASK 5 ###############################################
+        System.out.println("Print Report: ");
+        char pipes = '|';
+        String underscores = "_";
+        String headers = "Name       | Department | Salary     | Rating | Year of Experience |";
+        System.out.printf("%s\n", underscores.repeat(headers.length()));
+        System.out.println(headers);
+        System.out.printf("%s\n", underscores.repeat(headers.length()));
+        ArrayList<Employee<Integer>> emploList = db.getAllEmployees();
+        int colSpan = 11;
+        for (Employee<Integer> employee : emploList) {
+            String salary = String.format("%.2f", employee.getSalary());
+            String rating = String.format("%.2f", employee.getPerformanceRating());
+            String name = employee.getName();
+            String department = employee.getDepartment();
+
+            if (name.length() >= colSpan) {
+                // Manipulate name to be the firstname and first letter of lastname ex: Ajika K.
+                String firstName = name.split(" ")[0];
+                char firstLetterOfLastName = name.split(" ")[1].toUpperCase().charAt(0);
+                name = firstName.concat(" " + firstLetterOfLastName + ".");
+            }
+            if (employee.getDepartment().length() >= colSpan) {
+                department = department.split(" ")[0];
+            }
+            int nameSpace = colSpan - name.length();
+            int departmentSpace = colSpan - department.length();
+
+            System.out.printf("%s %" + nameSpace + "c %s %" + departmentSpace +
+                            "c %-10s %c %-6s %c %-18d %c \n",
+                    name, pipes, department, pipes, salary, pipes, rating, pipes,
+                    employee.getYearsOfExperience(), pipes);
+
+        }
+        System.out.printf("%s\n", underscores.repeat(headers.length()));
+
 
     }
 }
