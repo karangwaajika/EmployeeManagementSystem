@@ -78,6 +78,7 @@ public class Database<T> {
             double salary = employee.getSalary();
             double ratingPerformance = employee.getPerformanceRating();
 
+            // for employees with a min rating, update salary
             if (ratingPerformance >= minPerformanceRating) {
                 employee.setSalary(salary + raiseAmount);
             }
@@ -88,6 +89,7 @@ public class Database<T> {
 
     public List<Employee<T>> retrieveTopFiveHighestPaid() {
         ArrayList<Employee<T>> employeeList = new ArrayList<>(employees.values());
+        // first, sort employee salary from high to low
         Comparator<Employee<T>> comparator = new Comparator<>() {
             @Override
             public int compare(Employee<T> o1, Employee<T> o2) {
@@ -99,6 +101,8 @@ public class Database<T> {
             }
         };
         Collections.sort(employeeList, comparator);
+
+        // retrieve only five employees from the sorted employees
         if (employeeList.size() >= 5) {
             return employeeList.subList(0, 4);
         }
@@ -107,24 +111,40 @@ public class Database<T> {
     }
 
     public HashMap<String, ArrayList<Double>> getAverageDepartmentSalary() {
+        /*{
+            "HR": [2000, 1],
+            "IT": [34000, 3]
+          }
+        above is the goal to get average in each department. value[0] is total amount and
+        value[1] is the total number of employees*/
+
         HashMap<String, ArrayList<Double>> departmentToSalaries = new HashMap<>();
-        List<Employee<T>> employeeList = new ArrayList<>(employees.values()).stream().toList();
+
+        List<Employee<T>> employeeList = new ArrayList<>(employees.values())
+                .stream().toList();
         Iterator<Employee<T>> iterator = employeeList.iterator();
         while (iterator.hasNext()) {
             Employee<T> employee = iterator.next();
             String department = employee.getDepartment();
+            // if department name exist already in hashmap
             if (departmentToSalaries.containsKey(department)) {
-                ArrayList<Double> salaryList = departmentToSalaries.get(department);
-                double salary = salaryList.get(0) + employee.getSalary();
-                double nbrOfEmployees = salaryList.get(1) + 1;
+                ArrayList<Double> salaryList = departmentToSalaries.get(department); // value array
+
+                double salary = salaryList.get(0) + employee.getSalary(); // old salary + new one
+                double nbrOfEmployees = salaryList.get(1) + 1; // old + new nbr of employees
+
                 salaryList.add(0, salary);
                 salaryList.add(1, nbrOfEmployees);
-                departmentToSalaries.put(department, salaryList);
+
+                departmentToSalaries.put(department, salaryList); // update the hashMap
             } else {
-                ArrayList<Double> salaryList = new ArrayList<>();
-                salaryList.add(employee.getSalary());
+                // for a new department
+                ArrayList<Double> salaryList = new ArrayList<>(); // an array to store amount and nbr of employees
+
+                salaryList.add(employee.getSalary()); //store in index 0
                 double nbrOfEmployees = 1;
-                salaryList.add(nbrOfEmployees);
+                salaryList.add(nbrOfEmployees); // store in index 1
+
                 departmentToSalaries.put(department, salaryList);
             }
 

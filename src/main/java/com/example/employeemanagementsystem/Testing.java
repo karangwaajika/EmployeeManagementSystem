@@ -42,8 +42,21 @@ public class Testing {
         // get all the employees from the database
         System.out.println(db.getAllEmployees());
 
+        // update a single attribute
         db.updateEmployeeDetails(1, "yearsOfExperience", 4);
-        System.out.println(db.removeEmployee(4));
+        // update more attributes at once
+        HashMap<String, Object> attributesToUpdate = new HashMap<>();
+        attributesToUpdate.put("name", "ajika");
+        attributesToUpdate.put("department", "IT");
+        attributesToUpdate.put("perfornmanceRating", 4.7);
+
+        for (Map.Entry<String, Object> entry : attributesToUpdate.entrySet()) {
+            int employeeId = 1;
+            db.updateEmployeeDetails(employeeId, entry.getKey(), entry.getValue());
+        }
+
+
+        System.out.println(db.removeEmployee(4)); // remove employee
 
         System.out.println(db.getAllEmployees());
         ls.forEach((employee) -> {
@@ -148,6 +161,15 @@ public class Testing {
             System.out.printf("%d| name:%s, dep: %s, years: %d, salary: %f, rating: %f\n", employee.employeeId, employee.getName(),
                     employee.getDepartment(), employee.getYearsOfExperience()
                     , employee.getSalary(), employee.getPerformanceRating());
+        }
+
+        System.out.println("average salary in each department");
+
+        HashMap<String, ArrayList<Double>> departmentToSalaries = db.getAverageDepartmentSalary();
+        for(Map.Entry<String, ArrayList<Double>> entry: departmentToSalaries.entrySet()){
+            double avg = entry.getValue().get(0)/entry.getValue().get(1);
+            String department = entry.getKey();
+            System.out.printf("%s | %f \n", department, avg);
         }
 
     }
